@@ -12,7 +12,7 @@ const getById = async (id) => {
     const message = { message: 'Product not found' };
     return message;
   }
-  
+
   return product;
 };
 
