@@ -18,6 +18,14 @@ const getById = async (req, res) => {
 const create = async (req, res) => {
   const { name } = req.body;
   const newProduct = await productsService.create({ name });
+
+  if (newProduct.message && newProduct.message.includes('required')) {
+    return res.status(400).json(newProduct);
+  }
+  if (newProduct.message && newProduct.message.includes('length')) {
+    return res.status(422).json(newProduct);
+  }
+
   return res.status(201).json(newProduct);
 };
 

@@ -1,4 +1,5 @@
 const productsModel = require('../models/productsModel');
+const middleware = require('../middlewares/products.middlewares');
 
 const getAll = async () => {
   const products = await productsModel.getAll();
@@ -17,6 +18,9 @@ const getById = async (id) => {
 };
 
 const create = async ({ name }) => {
+  const message = middleware.verifyName(name);
+  if (message !== 'ok') return message;
+  
   const id = await productsModel.create({ name });
   return { id, name };
 };
