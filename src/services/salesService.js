@@ -13,7 +13,7 @@ const salesSchema = Joi.object({
 const create = async (salesArr) => {
   const salesArraySchema = Joi.array().items(salesSchema);
   const { error } = salesArraySchema.validate(salesArr);
-  if (error) throw { status: 400, message: error.message };
+  if (error) throw new { status: 400, message: error.message }();
 
   const newSalePromises = salesArr.map((e) => salesModel(e));
   const newSaleResolvePromise = await Promise.all(newSalePromises);
