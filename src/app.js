@@ -1,4 +1,5 @@
 const express = require('express');
+const { verifyAtributtes } = require('./middlewares/sales.middlewares');
 
 const productsController = require('./controllers/productsController');
 const salesController = require('./controllers/salesController');
@@ -13,7 +14,7 @@ app.get('/products/:id', productsController.getById);
 
 app.post('/products', productsController.create);
 
-app.post('/sales', salesController.create);
+app.post('/sales', verifyAtributtes, salesController.create);
 
 // app.get('/sales', salesController.getAll);
 

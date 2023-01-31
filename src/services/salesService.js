@@ -1,25 +1,24 @@
 const Joi = require('joi');
 const salesModel = require('../models/salesModel');
+// const getAllProducts = require('./ProductsService');
 
-const salesSchema = Joi.object({
-  productId: Joi.number().required().label('productId'),
-  quantity: Joi.number().min(1).required().label('quantity'),
+const schema = Joi.object({
+  quantity: Joi.number().min(1).required()
+    .label('quantity'),
 }).messages({
-  'any.required': '{{#label}} is required',
   'number.min': '{{#label}} must be greater than or equal to 1',
-  'number.empty': 'Product not found',
 });
 
 const create = async (salesArr) => {
-  const salesArraySchema = Joi.array().items(salesSchema);
-  const { error } = salesArraySchema.validate(salesArr);
-  if (error) throw new { status: 400, message: error.message }();
+  const arrSchema = Joi.array().items(schema);
+  const { error } = arrSchema.validate(salesArr);
 
-  const newSalePromises = salesArr.map((e) => salesModel(e));
-  const newSaleResolvePromise = await Promise.all(newSalePromises);
-  const newSales = salesArr
-    .map((e, i) => ({ id: newSaleResolvePromise[i], ...e }));
-  return newSales.sort((a, b) => a.id - b.id);
+  if (error) return { status: 422, message: error.message };
+
+  // getAllProducts.getAll();
+
+  const productSale = await salesModel.createProductSale(salesArr);
+  return { status: null, message: productSale };
 };
 
 // const getAll = async () => {
