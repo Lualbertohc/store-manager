@@ -1,8 +1,9 @@
 const Joi = require('joi');
 const salesModel = require('../models/salesModel');
-// const getAllProducts = require('./ProductsService');
+const getAllProducts = require('./ProductsService');
 
 const schema = Joi.object({
+  productId: Joi.number().required(),
   quantity: Joi.number().min(1).required()
     .label('quantity'),
 }).messages({
@@ -15,7 +16,11 @@ const create = async (salesArr) => {
 
   if (error) return { status: 422, message: error.message };
 
-  // getAllProducts.getAll();
+  const allProducts = await getAllProducts.getAll();
+  const allProductsId = allProducts.map((e) => e.id);
+  const validateProductIdSale = salesArr.every((e) => allProductsId.includes(e.productId));
+
+  if (!validateProductIdSale) return { status: 404, message: 'Product not found' };
 
   const productSale = await salesModel.createProductSale(salesArr);
   return { status: null, message: productSale };
