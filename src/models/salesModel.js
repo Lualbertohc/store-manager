@@ -25,9 +25,8 @@ const responseGetAll = (data) => data.map((e) => ({
 }));
 
 const getAll = async () => {
-  const query = `SELECT sale_id, date, product_id, quantity 
-  FROM sales AS s INNER JOIN sales_products AS sp ON s.id = sp.sale_id`;
-  const [sales] = await connection.execute(query);
+  const query = 'SELECT sale_id, date, product_id, quantity';
+  const [sales] = await connection.execute(`${query} FROM sales AS s INNER JOIN sales_products AS sp ON s.id = sp.sale_id`);
   return responseGetAll(sales);
 };
 
@@ -38,9 +37,9 @@ const responseId = (data) => data.map((e) => ({
 }));
 
 const getById = async (id) => {
-  const query = `SELECT date, product_id, quantity 
-  FROM sales AS s INNER JOIN sales_products AS sp ON s.id = sp.sale_id WHERE s.id = ?`;
-  const [salesId] = await connection.execute(query, [id]);
+  const query = 'SELECT date, product_id, quantity FROM sales AS s';
+  const [salesId] = await connection
+    .execute(`${query} INNER JOIN sales_products AS sp ON s.id = sp.sale_id WHERE s.id = ?`, [id]);
   return responseId(salesId);
 };
 
