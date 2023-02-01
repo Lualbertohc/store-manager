@@ -17,21 +17,35 @@ const createProductSale = async (salesArr) => {
   };
 };
 
-// const getAll = async () => {
-//   const query = 'SELECT * FROM sales_products';
-//   const [sales] = await connection.execute(query);
-//   return sales;
-// };
+const responseGetAll = (data) => data.map((e) => ({
+  saleId: e.sale_id,
+  date: e.date,
+  productId: e.product_id,
+  quantity: e.quantity,
+}));
 
-// const getById = async (id) => {
-//   const query = 'SELECT * FROM sales WHERE id = ?';
-//   const [[sales]] = await connection.execute(query, [id]);
-//   return sales;
-// };
+const getAll = async () => {
+  const query = `SELECT sale_id, date, product_id, quantity 
+  FROM sales AS s INNER JOIN sales_products AS sp ON s.id = sp.sale_id`;
+  const [sales] = await connection.execute(query);
+  return responseGetAll(sales);
+};
+
+const responseId = (data) => data.map((e) => ({
+  date: e.date,
+  productId: e.product_id,
+  quantity: e.quantity,
+}));
+
+const getById = async (id) => {
+  const query = `SELECT date, product_id, quantity 
+  FROM sales AS s INNER JOIN sales_products AS sp ON s.id = sp.sale_id WHERE s.id = ?`;
+  const [salesId] = await connection.execute(query, [id]);
+  return responseId(salesId);
+};
 
 module.exports = {
   createProductSale,
-  // createSale,
-  // getAll,
-  // getById,
+  getAll,
+  getById,
 };

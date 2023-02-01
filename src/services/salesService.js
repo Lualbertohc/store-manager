@@ -26,18 +26,21 @@ const create = async (salesArr) => {
   return { status: null, message: productSale };
 };
 
-// const getAll = async () => {
-//   const sales = await salesModel.getAll();
-//   return sales;
-// };
+const getAll = async () => {
+  const sales = await salesModel.getAll();
+  return sales;
+};
 
-// const getById = async (id) => {
-//   const sales = await salesModel.getById(id);
-//   return sales;
-// };
+const getById = async (id) => {
+  const sales = await salesModel.getById(id);
+
+  if (!sales || sales.length === 0) return { message: 'Sale not found' };
+    
+  return sales;
+};
 
 module.exports = {
   create,
-  // getAll,
-  // getById,
+  getAll,
+  getById,
 };
