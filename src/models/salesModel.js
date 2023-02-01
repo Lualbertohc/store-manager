@@ -25,8 +25,9 @@ const responseGetAll = (data) => data.map((e) => ({
 }));
 
 const getAll = async () => {
-  const query = 'SELECT sale_id, date, product_id, quantity';
-  const [sales] = await connection.execute(`${query} FROM sales AS s INNER JOIN sales_products AS sp ON s.id = sp.sale_id`);
+  const query = 'SELECT sale_id, date, product_id, quantity FROM sales AS s';
+  const [sales] = await connection
+    .execute(`${query} INNER JOIN sales_products AS sp ON s.id = sp.sale_id`);
   return responseGetAll(sales);
 };
 
