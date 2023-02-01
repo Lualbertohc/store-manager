@@ -26,6 +26,9 @@ const create = async ({ name }) => {
 };
 
 const update = async (id, name) => {
+  const message = middleware.verifyName(name);
+  if (message !== 'ok') return message;
+  
   const updatedProducts = await productsModel.update(id, name);
 
   if (!updatedProducts || updatedProducts.length === 0) return { message: 'Product not found' };
