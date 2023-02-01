@@ -18,8 +18,20 @@ const create = async ({ name }) => {
   return newProduct.insertId;
 };
 
+const update = async (id, name) => {
+  const queryUpdateName = 'UPDATE products SET name = ? WHERE id = ?';
+
+  await connection.execute(queryUpdateName, [name, id]);
+
+  const query = 'SELECT * FROM products WHERE id = ?';
+
+  const [updated] = await connection.execute(query, [id]);
+  return updated[0];
+};
+
 module.exports = {
   getAll,
   getById,
   create,
+  update,
 };
