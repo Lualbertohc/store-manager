@@ -29,9 +29,30 @@ const update = async (id, name) => {
   return updated[0];
 };
 
+const getProduct = async (id) => {
+  const getProductQuery = 'SELECT * FROM products WHERE id = ?';
+  const [get] = await connection.execute(getProductQuery, [id]);
+
+  if (!get || get.length === 0 || get === undefined) {
+    const message = { message: 'Product not found' };
+    return message;
+  }
+  return 'ok';
+};
+
+const del = async (id) => {
+  const get = await getProduct(id);
+  if (get.message) return get;
+  
+  const query = 'DELETE FROM products WHERE id = ?';
+  await connection.execute(query, [id]);
+  return 'deleted';
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
+  del,
 };
