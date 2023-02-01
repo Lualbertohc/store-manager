@@ -39,8 +39,14 @@ const getById = async (id) => {
   return sales;
 };
 
+const del = async (id) => {
+  const deletedSale = await salesModel.del(id);
+  return deletedSale;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  del,
 };

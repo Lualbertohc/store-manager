@@ -44,8 +44,33 @@ const getById = async (id) => {
   return responseId(salesId);
 };
 
+const getSale = async (id) => {
+  const getProductQuery = 'SELECT * FROM sales WHERE id = ?';
+  const [get] = await connection.execute(getProductQuery, [id]);
+
+  if (!get || get.length === 0 || get === undefined) {
+    const message = { message: 'Sale not found' };
+    return message;
+  }
+  return 'ok';
+};
+
+const del = async (id) => {
+  const get = await getSale(id);
+  if (get.message) return get;
+
+  const querySales = 'DELETE FROM sales WHERE id = ?';
+  const querySalesProduct = 'DELETE FROM sales_products WHERE sale_id = ?';
+
+  await connection.execute(querySales, [id]);
+  await connection.execute(querySalesProduct, [id]);
+
+  return 'deleted';
+};
+
 module.exports = {
   createProductSale,
   getAll,
   getById,
+  del,
 };
