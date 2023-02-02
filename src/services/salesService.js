@@ -3,7 +3,7 @@ const salesModel = require('../models/salesModel');
 const getAllProducts = require('./ProductsService');
 
 const schema = Joi.object({
-  productId: Joi.number().required(),
+  productId: Joi.number().min(1).required().label('productId'),
   quantity: Joi.number().min(1).required()
     .label('quantity'),
 }).messages({
@@ -44,9 +44,25 @@ const del = async (id) => {
   return deletedSale;
 };
 
+// const update = async (id, productId, quantity) => {  
+//   const updatedProducts = await salesModel.update(id, productId, quantity);
+//   return updatedProducts;
+// };
+
+const update = async (id, arr) => {
+  const arrSchema = Joi.array().items(schema);
+  const { error } = arrSchema.validate(arr);
+
+  if (error) return { status: 422, message: error.message };
+
+  const productSale = await salesModel.update(+id, arr);
+  return { status: null, message: productSale };
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   del,
+  update,
 };

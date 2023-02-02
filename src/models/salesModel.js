@@ -4,12 +4,12 @@ const createProductSale = async (salesArr) => {
   const queryId = 'INSERT INTO sales (date) VALUES(NOW())';
   const [{ insertId }] = await connection.execute(queryId);
 
-   Promise.all(salesArr
-     .map(async (e) => {
-       await connection.execute(
-         'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)', 
-         [insertId, e.productId, e.quantity],
-       );
+  Promise.all(salesArr
+    .map(async (e) => {
+      await connection.execute(
+        'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
+        [insertId, e.productId, e.quantity],
+      );
     }));
   return {
     id: insertId,
@@ -68,9 +68,69 @@ const del = async (id) => {
   return 'deleted';
 };
 
+// const objMaker = (id, p, q) => {
+//   const obj = {
+//     saleId: id,
+//     itemsUpdated: [
+//       {
+//         productId: p,
+//         quantity: q,
+//       },
+//       {
+//         productId: p,
+//         quantity: q,
+//       },
+//     ],
+//   };
+//   return obj;
+// };
+
+// const update = async (id, productId, quantity) => {
+//   const get = await getSale(id);
+//   if (get.message) return get;
+
+//   const querySalesProductId = 'UPDATE sales_products SET product_id = ? WHERE sale_id = ?';
+//   const queryQuantity = 'UPDATE sales_products SET quantity = ? WHERE sale_id = ?';
+
+//   await connection.execute(querySalesProductId, [productId, id]);
+//   await connection.execute(queryQuantity, [quantity, id]);
+
+//   const obj = objMaker(id, productId, quantity);
+//   return obj;
+// };
+
+const update = async (id, arr) => {
+  const getProductQuery = 'SELECT * FROM sales WHERE id = ?';
+  const [get] = await connection.execute(getProductQuery, [id]);
+  if (!get || get.length === 0 || get === undefined) {
+    return { status: 422, message: 'Sale not found' };
+  }
+
+  Promise.all(arr
+    .map(async (e) => {
+      // await connection.execute(
+      //   'UPDATE sales_products SET product_id = ? WHERE sale_id = ?',
+      //   [e.productId, e.id],
+      // );
+      //   await connection.execute(
+      //   'UPDATE sales_products SET quantity = ? WHERE sale_id = ?',
+      //   [e.quantity, e.id],
+      // );
+      await connection
+        .execute('UPDATE sales_products SET product_id = ?, quantity = ? WHERE sale_id = ?',
+          [e.id, e.quantity, e.productId]);
+    }));
+
+  return {
+    saleId: id,
+    itemsUpdated: arr,
+  };
+};
+
 module.exports = {
   createProductSale,
   getAll,
   getById,
   del,
+  update,
 };

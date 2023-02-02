@@ -1,18 +1,15 @@
-const verifyAtributtes = (req, res, next) => {
-  const arr = req.body;
+const verifyProductsAtributtes = (req, res, next) => {
+  const { productId, quantity } = req.body[0]; 
 
-  const verifyProductId = arr.every((e) => e.productId);
-  const verifyQuantity = arr.every((e) => e.quantity || e.quantity === 0);
-
-  if (!verifyProductId) {
+  if (!productId) {
     return res.status(400).json({ message: '"productId" is required' });
   }
-  if (!verifyQuantity) {
+  if (!quantity) {
     return res.status(400).json({ message: '"quantity" is required' });
   }
   next();
 };
 
 module.exports = {
-  verifyAtributtes,
+  verifyProductsAtributtes,
 };
