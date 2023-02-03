@@ -36,19 +36,6 @@ const del = async (req, res) => {
   return res.status(204).json();
 };
 
-// const update = async (req, res) => {
-//   const { id } = req.params;
-//   const { productId, quantity } = req.body[0];
-
-//   const sale = await salesService.update(id, productId, quantity);
-
-//   if (sale.message) {
-//     return res.status(404).json(sale);
-//   }
-
-//   return res.status(200).json(sale);
-// };
-
 const update = async (req, res) => {
   const { id } = req.params;
   const sale = req.body;
@@ -58,7 +45,7 @@ const update = async (req, res) => {
     return res.status(status).json({ message });
   }
 
-  return res.status(201).json(message);
+  return res.status(200).json(message);
 };
 
 module.exports = {

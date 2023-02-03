@@ -3,7 +3,7 @@ const salesModel = require('../models/salesModel');
 const getAllProducts = require('./ProductsService');
 
 const schema = Joi.object({
-  productId: Joi.number().min(1).required().label('productId'),
+  productId: Joi.number().required(),
   quantity: Joi.number().min(1).required()
     .label('quantity'),
 }).messages({
@@ -44,18 +44,26 @@ const del = async (id) => {
   return deletedSale;
 };
 
-// const update = async (id, productId, quantity) => {  
-//   const updatedProducts = await salesModel.update(id, productId, quantity);
-//   return updatedProducts;
-// };
-
 const update = async (id, arr) => {
   const arrSchema = Joi.array().items(schema);
   const { error } = arrSchema.validate(arr);
 
   if (error) return { status: 422, message: error.message };
 
-  const productSale = await salesModel.update(+id, arr);
+  const { message } = await getById(id);
+
+  if (message) return { status: 404, message };
+
+  const allProducts = await getAllProducts.getAll();
+
+  const allProductsId = allProducts.map((e) => e.id);
+  const validateProduct = arr.every((e) => allProductsId.includes(e.productId));
+
+  if (!validateProduct) return { status: 404, message: 'Product not found' };
+  
+  const oldProductId = await getById(id);
+
+  const productSale = await salesModel.update(+id, arr, oldProductId);
   return { status: null, message: productSale };
 };
 

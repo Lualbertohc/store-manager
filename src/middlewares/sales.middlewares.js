@@ -1,10 +1,13 @@
 const verifyProductsAtributtes = (req, res, next) => {
-  const { productId, quantity } = req.body[0]; 
+  const arr = req.body; 
 
-  if (!productId) {
+  const verifyProductId = arr.every((e) => e.productId);
+  const verifyQuantity = arr.every((e) => e.quantity || e.quantity === 0);
+
+  if (!verifyProductId) {
     return res.status(400).json({ message: '"productId" is required' });
   }
-  if (!quantity) {
+  if (!verifyQuantity) {
     return res.status(400).json({ message: '"quantity" is required' });
   }
   next();
