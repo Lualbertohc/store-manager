@@ -52,10 +52,17 @@ const del = async (req, res) => {
   return res.status(204).json();
 };
 
+const getByName = async (req, res) => {
+  const { q } = req.query;
+  const { message } = await productsService.getByName(q);
+  return res.status(200).json(message);
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   del,
+  getByName,
 };

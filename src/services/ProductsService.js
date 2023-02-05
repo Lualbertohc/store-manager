@@ -1,3 +1,4 @@
+const { TestScheduler } = require('jest');
 const productsModel = require('../models/productsModel');
 const middleware = require('../middlewares/products.middlewares');
 
@@ -41,10 +42,16 @@ const del = async (id) => {
   return deletedProduct;
 };
 
+const getByName = async (q) => {
+  const products = await productsModel.getByName(q);
+  return { status: null, message: products };
+};
+
 module.exports = {
   getAll,
   getById,
   create,
   update,
   del,
+  getByName,
 };

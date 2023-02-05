@@ -9,6 +9,8 @@ app.use(express.json());
 
 app.get('/products', productsController.getAll);
 
+app.get('/products/search', productsController.getByName);
+
 app.get('/products/:id', productsController.getById);
 
 app.post('/products', productsController.create);

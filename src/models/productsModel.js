@@ -1,3 +1,4 @@
+const camelize = require('camelize');
 const connection = require('./connection');
 
 const getAll = async () => {
@@ -43,10 +44,16 @@ const getProduct = async (id) => {
 const del = async (id) => {
   const get = await getProduct(id);
   if (get.message) return get;
-  
+
   const query = 'DELETE FROM products WHERE id = ?';
   await connection.execute(query, [id]);
   return 'deleted';
+};
+
+const getByName = async (q) => {
+  const query = 'SELECT * FROM products WHERE name LIKE ?';
+  const [getReturn] = await connection.execute(query, [`%${q}%`]);
+  return camelize(getReturn);
 };
 
 module.exports = {
@@ -55,4 +62,5 @@ module.exports = {
   create,
   update,
   del,
+  getByName,
 };
