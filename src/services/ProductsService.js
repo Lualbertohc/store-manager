@@ -1,4 +1,3 @@
-const { TestScheduler } = require('jest');
 const productsModel = require('../models/productsModel');
 const middleware = require('../middlewares/products.middlewares');
 
