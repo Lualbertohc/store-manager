@@ -22,21 +22,50 @@ describe('Model de sales', function () {
     });
   });
 
-  // describe('excluí vendas do banco de dados', function () {
+  describe('Listar vendas por id', function () {
 
-  //   afterEach(() => {
-  //     sinon.restore();
-  //   });
+    afterEach(() => {
+      sinon.restore();
+    });
 
-  //   it('retorna "deleted"', async function () {
+    it('retorna vedas por id', async function () {
 
-  //     const deletId = 4;
+      const saleId = [
+        {
+          "date": "2023-02-06T14:34:09.000Z",
+          "productId": undefined,
+          "quantity": 5
+        },
+        {
+          "date": "2023-02-06T14:34:09.000Z",
+          "productId": undefined,
+          "quantity": 10
+        }
+      ]
 
-  //     sinon.stub(connection, 'execute').resolves([{ delete: 1 }])
+      sinon.stub(connection, 'execute').resolves([saleId])
 
-  //     const products = await salesModel.update(deletId);
+      const sales = await salesModel.getById(2);
 
-  //     expect(products).to.be.undefined;
-  //   });
-  // });
+      expect(sales).to.be.deep.equal(saleId);
+    });
+  });
+
+  describe('excluí vendas do banco de dados', function () {
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('retorna "deleted"', async function () {
+
+      const deletId = 4;
+
+      sinon.stub(connection, 'execute').resolves([{ delete: 1 }])
+
+      const products = await salesModel.del(deletId);
+
+      expect(products).to.be.deep.equal("deleted");
+    });
+  });
 });
