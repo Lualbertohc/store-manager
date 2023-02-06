@@ -1,39 +1,28 @@
-const sinon = require('sinon');
-const { expect } = require('chai');
+const chai = require("chai");
+const sinon = require("sinon");
+const sinonChai = require('sinon-chai');
+const productsController = require('../../../src/controllers/productsController');
+const productService = require('../../../src/services/ProductsService');
+const {
+  products, azuraProduct, mephalaProduct, boethiaProductShadow, azuraProductShadow,
+  mephalaProductShadow, notFound
+} = require('./mock/products.mock');
 
-const model = require('../../../src/models/productsModel');
-const service = require('../../../src/services/ProductsService');
-const controller = require('../../../src/controllers/productsController');
+const { expect } = chai;
+chai.use(sinonChai);
 
-const products = [
-  {
-    "id": 1,
-    "name": "productX",
-  },
-  {
-    "id": 2,
-    "name": "productY",
-  }
-]
-
-describe('camada controller de products', () => {
-  describe('teste para GET', () => {
-    const res = {};
-    const req = {};
-
-    before(() => {
-      res.status = sinon.stub().return(res);
-      res.send = sinon.stub().return();
-      sinon.stub(model, 'getAll').resolves(products)
-    })
+describe('Teste na rota products', function () {
+  afterEach(function () {
+    sinon.restore();
   })
 })
 
-after(() => {
-  model.getAll.restore();
-})
-
-it('status 200 para tudo certo', async () => {
-  await controller.getAll(req, res);
-  expect(res.status.calledWidth(200).to.be.equal(true));
+describe('Teste na listagem de products', function () {
+  it('status 200', async function () {
+    const res = {};
+    const req = {};
+    res.status = sinon.stub().returns(res);
+    res.json = sinon.stub().returns();
+    sinon.stub(products)
+  })
 })
