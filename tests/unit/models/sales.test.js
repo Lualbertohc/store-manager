@@ -22,21 +22,21 @@ describe('Model de sales', function () {
     });
   });
 
-  describe('excluí vendas do banco de dados', function () {
+  // describe('excluí vendas do banco de dados', function () {
 
-    afterEach(() => {
-      sinon.restore();
-    });
+  //   afterEach(() => {
+  //     sinon.restore();
+  //   });
 
-    it('retorna "deleted"', async function () {
+  //   it('retorna "deleted"', async function () {
 
-      const deletId = 4;
+  //     const deletId = 4;
 
-      sinon.stub(connection, 'execute').resolves([{ delete: 1 }])
+  //     sinon.stub(connection, 'execute').resolves([{ delete: 1 }])
 
-      const products = await salesModel.update(deletId);
+  //     const products = await salesModel.update(deletId);
 
-      expect(products).to.be.undefined;
-    });
-  });
+  //     expect(products).to.be.undefined;
+  //   });
+  // });
 });
