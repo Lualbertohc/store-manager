@@ -103,21 +103,35 @@ describe('Teste sales na controller', function () {
 
       req.body = [
         {
-          "productId": 1,
-          "quantity": 1
+          productId: 1,
+          quantity: 1
         },
         {
-          "productId": 2,
-          "quantity": 5
+          productId: 2,
+          quantity: 5
         }
       ];
 
-      sinon.stub(salesService, 'create').resolves(req.body);
+      const newSale = {
+        id: 3,
+        itemsSold: [
+          {
+            productId: 1,
+            quantity: 1
+          },
+          {
+            productId: 2,
+            quantity: 5
+          }
+        ]
+      }
+
+      sinon.stub(salesService, 'create').resolves({ type: null, message: newSale });
 
       await salesController.create(req, res);
 
       expect(res.status).to.have.been.calledWith(201);
-      expect(res.json).to.have.been.calledWithExactly(req.body);
+      expect(res.json).to.have.been.calledWithExactly(newSale);
     });
   });
 });
